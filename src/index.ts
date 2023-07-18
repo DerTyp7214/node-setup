@@ -11,7 +11,7 @@ dotenv()
 const appPath = path.resolve(process.cwd()).split('node_modules')[0]
 
 const defaultConfig: NodeSetupConfig = {
-  packageManager: process.env.PACKAGE_MANAGER || 'npm',
+  packageManager: process.env.PACKAGE_MANAGER || '',
   envVars: [],
 }
 
@@ -26,21 +26,90 @@ const config: NodeSetupConfig = {
   ...packageJson['node-setup'],
 }
 
-async function install() {
-  const child = spawn(config.packageManager, ['install'], {
-    stdio: 'inherit',
+async function setupPackageManager() {
+  if (!config.packageManager) {
+    const packageManagerPrompt = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'packageManager',
+        message: 'Package manager',
+        choices: [
+          {
+            name: 'npm',
+            value: 'npm',
+          },
+          {
+            name: 'pnpm',
+            value: 'pnpm',
+          },
+          {
+            name: 'yarn',
+            value: 'yarn',
+          },
+        ],
+      },
+    ])
+
+    config.packageManager = packageManagerPrompt.packageManager
+
+    packageJson['node-setup'] = config
+
+    writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2))
+  }
+
+  const child = spawn(config.packageManager, ['-v'], {
+    stdio: 'ignore',
     shell: true,
   })
 
-  await new Promise((resolve, reject) => {
-    child.addListener('error', reject)
-    child.addListener('exit', resolve)
-  }).catch((error) => {
-    console.error(error)
-    process.exit(1)
+  return new Promise((resolve, reject) => {
+    child.on('error', reject)
+    child.on('close', (code) => (code === 0 ? resolve(code) : reject()))
   })
+    .then(() => {
+      console.log(
+        chalk.blackBright('Using'),
+        chalk.blueBright(config.packageManager),
+      )
+    })
+    .catch(async () => {
+      if (config.packageManager === 'pnpm') {
+        console.log(
+          chalk.redBright(`\n${config.packageManager} is not installed.`),
+        )
 
-  console.log('Installed dependencies')
+        const installPrompt = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'install',
+            message: `Install ${config.packageManager}?`,
+            default: true,
+          },
+        ])
+
+        if (installPrompt.install) {
+          const child = spawn('npm', ['i', '-g', 'pnpm'], {
+            stdio: 'inherit',
+            shell: true,
+          })
+
+          return new Promise((resolve, reject) => {
+            child.on('error', reject)
+            child.on('close', (code) =>
+              code === 0 ? resolve(true) : reject(false),
+            )
+          })
+        }
+        return false
+      } else {
+        console.log(
+          chalk.redBright(
+            `\n${config.packageManager} is not installed. Please install it and try again.`,
+          ),
+        )
+        return false
+      }
+    })
 }
 
 async function setupEnv() {
@@ -118,8 +187,8 @@ async function setupEnv() {
 }
 
 async function main() {
-  console.log(chalk.blackBright('Installing dependencies\n'))
-  await install()
+  console.log(chalk.blackBright('Setting up package manager\n'))
+  await setupPackageManager()
   console.log(chalk.blackBright('\nSetting up environment variables\n'))
   await setupEnv()
   console.log(chalk.green('\n✓'), chalk.blackBright('Done'))
@@ -128,5 +197,5 @@ async function main() {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 main()
 
-export { NodeSetupConfig, PackageJson, defaultConfig, install, setupEnv }
+export { NodeSetupConfig, PackageJson, defaultConfig, setupEnv }
 
