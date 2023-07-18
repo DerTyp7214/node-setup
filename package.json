@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "out/index.js",
+  "bin": {
+    "node-setup": "./out/index.js"
+  },
   "type": "module",
   "scripts": {
     "compile": "tsc",
