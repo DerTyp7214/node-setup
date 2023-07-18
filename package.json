@@ -1,6 +1,6 @@
 {
-  "name": "node-setup",
-  "version": "1.0.0",
+  "name": "node-setup-project",
+  "version": "1.0.1",
   "description": "",
   "main": "out/index.js",
   "bin": {

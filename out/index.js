@@ -62,6 +62,7 @@ async function setupEnv() {
                     name: 'Save and exit',
                     value: 'save',
                 },
+                new inquirer.Separator(),
             ],
         },
     ]);
