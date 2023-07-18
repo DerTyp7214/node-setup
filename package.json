@@ -8,15 +8,15 @@
     "compile": "tsc",
     "start": "ts-node-esm src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --ext .ts src",
-    "release": "pnpm run compile && pnpm publish --access public"
+    "lint": "eslint --ext .ts src"
   },
   "files": [
     "out"
   ],
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "DerTyp7214",
+  "license": "MIT",
+  "repository": "DerTyp7214/node-setup",
   "devDependencies": {
     "@types/inquirer": "^9.0.3",
     "@types/node": "^20.4.2",
