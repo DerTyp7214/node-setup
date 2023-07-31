@@ -13,7 +13,7 @@
     "allowSyntheticDefaultImports": true,
     "newLine": "lf",
     "noEmitOnError": true,
-    "outDir": "out",
+    "outDir": "dist",
     "declaration": true,
     "typeRoots": ["node_modules/@types", "src"]
   },

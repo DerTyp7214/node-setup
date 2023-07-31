@@ -1,10 +1,10 @@
 {
-  "name": "node-setup-project",
+  "name": "@dertyp7214/node-setup",
   "version": "1.0.2",
   "description": "",
-  "main": "out/index.js",
+  "main": "dist/index.js",
   "bin": {
-    "node-setup": "./out/index.js"
+    "node-setup": "./dist/index.js"
   },
   "type": "module",
   "scripts": {
@@ -14,12 +14,12 @@
     "lint": "eslint --ext .ts src"
   },
   "files": [
-    "out"
+    "dist"
   ],
   "keywords": [],
   "author": "DerTyp7214",
   "license": "MIT",
-  "repository": "DerTyp7214/node-setup",
+  "repository": "https://github.com/DerTyp7214/node-setup",
   "devDependencies": {
     "@types/inquirer": "^9.0.3",
     "@types/node": "^20.4.2",
@@ -38,9 +38,12 @@
     "dotenv": "^16.3.1",
     "inquirer": "^9.2.8"
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "node-setup": {
     "packageManager": "pnpm",
     "envVars": []
   },
-  "typings": "./out/main.d.ts"
+  "typings": "./dist/main.d.ts"
 }
