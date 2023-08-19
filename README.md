@@ -1,5 +1,9 @@
 # Node Setup
 
+![npm](https://img.shields.io/npm/v/%40dertyp7214%2Fnode-setup)
+![npm](https://img.shields.io/npm/dw/%40dertyp7214/node-setup)
+![NPM](https://img.shields.io/npm/l/%40dertyp7214%2Fnode-setup)
+
 This Node.js script automates the process of installing dependencies and setting up environment variables for a Node.js project.
 
 ## Installation and Setup
